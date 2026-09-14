@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiniela NFL</title>
+<meta name="description" content="Picks de la semana contra la línea: Rafa, David y Emanuel.">
+<meta name="theme-color" content="#EEF1EC">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏈</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<style>
+:root {
+  --ground: #EEF1EC;
+  --surface: #FFFFFF;
+  --sunk: #F5F7F3;
+  --ink: #111915;
+  --muted: #5C6962;
+  --faint: #8D9992;
+  --line: #D9E0D8;
+  --turf: #1B6A3A;
+  --turf-on: #FFFFFF;
+  --turf-soft: #DDEBE1;
+  --chip-ink: #FFFFFF;
+  --p-rafa: #D9480F;
+  --p-david: #1864AB;
+  --p-emanuel: #9C36B5;
+  --win: #2B8A3E;
+  --loss: #C92A2A;
+  --push: #7A858D;
+  --display: "Big Shoulders Display", "Barlow Semi Condensed", "Arial Narrow", Impact, sans-serif;
+  --ui: "Barlow Semi Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --radius: 12px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #0C1310;
+    --surface: #141D18;
+    --sunk: #101814;
+    --ink: #E8EFEA;
+    --muted: #97A69D;
+    --faint: #6C7B72;
+    --line: #25322B;
+    --turf: #52C27E;
+    --turf-on: #07140C;
+    --turf-soft: #163020;
+    --chip-ink: #0C1310;
+    --p-rafa: #FF8A4C;
+    --p-david: #5AA9FF;
+    --p-emanuel: #D683EC;
+    --win: #51CF66;
+    --loss: #FF6B6B;
+    --push: #9AA5AD;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+  --me: var(--faint);
+}
+body[data-yo="rafa"] { --me: var(--p-rafa); }
+body[data-yo="david"] { --me: var(--p-david); }
+body[data-yo="emanuel"] { --me: var(--p-emanuel); }
+button { font: inherit; color: inherit; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--turf); outline-offset: 2px; }
+.c-rafa { --c: var(--p-rafa); }
+.c-david { --c: var(--p-david); }
+.c-emanuel { --c: var(--p-emanuel); }
+
+/* Barra superior */
+.barra {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--ground) 90%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top);
+}
+.barra-in { max-width: 680px; margin: 0 auto; padding: 10px 16px 10px; display: grid; gap: 10px; }
+.fila1 { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.semana { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.semana h1 {
+  margin: 0; font-family: var(--display); font-weight: 800; font-size: 30px;
+  text-transform: uppercase; letter-spacing: .01em; line-height: .95; white-space: nowrap;
+}
+.semana h1 small {
+  display: block; font-family: var(--ui); font-size: 11px; font-weight: 600;
+  letter-spacing: .16em; color: var(--muted); margin-bottom: 3px;
+}
+.flecha {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface);
+  display: grid; place-items: center; cursor: pointer; font-size: 18px; line-height: 1;
+}
+.flecha:disabled { opacity: .35; cursor: default; }
+.yo {
+  flex: none; display: flex; align-items: center; gap: 8px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
+  padding: 4px 12px 4px 4px; font-weight: 600; font-size: 15px;
+}
+.inicial {
+  width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c, var(--me)); color: var(--chip-ink); font-weight: 700; font-size: 14px;
+}
+.tabs { display: flex; gap: 3px; background: var(--sunk); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.tab {
+  flex: 1; border: 0; background: transparent; padding: 7px; border-radius: 7px;
+  font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer;
+}
+.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .1); }
+
+/* Contenido */
+main { max-width: 680px; margin: 0 auto; padding: 14px 16px 64px; display: grid; gap: 22px; }
+.marcador { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.jug {
+  display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 7px;
+  padding: 7px 10px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line);
+}
+.jug::before { content: ""; grid-row: span 2; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.jug b { font-weight: 700; font-size: 15px; }
+.jug span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.jug.listo span { color: var(--turf); font-weight: 600; }
+.jug.yo-mismo { border-color: var(--c); }
+
+.aviso {
+  font-size: 14px; padding: 10px 12px; border-radius: 10px; background: var(--turf-soft);
+  border: 1px dashed color-mix(in srgb, var(--turf) 45%, transparent);
+}
+.aviso b { font-weight: 700; }
+
+.dia { display: grid; gap: 8px; }
+.dia h2 {
+  margin: 0; display: flex; align-items: baseline; gap: 8px;
+  font-family: var(--display); font-weight: 800; font-size: 21px; letter-spacing: .03em; text-transform: uppercase;
+}
+.dia h2 span { font-family: var(--ui); font-size: 14px; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.juegos { display: grid; gap: 10px; }
+.juego { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px; }
+.meta { display: flex; gap: 10px; padding: 0 4px 7px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.meta .edo { margin-left: auto; font-weight: 600; }
+.meta .edo.vivo { color: var(--loss); }
+.meta .edo.cerrado::before { content: "🔒 "; }
+.lados { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 4px; }
+.vs { align-self: center; color: var(--faint); font-size: 13px; }
+.lado {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center;
+  column-gap: 8px; row-gap: 6px; min-width: 0; text-align: left; cursor: pointer;
+  padding: 9px 10px; border-radius: 9px; border: 1.5px solid var(--line); background: var(--sunk);
+  transition: border-color .15s, background-color .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.lado:not(:disabled):hover { border-color: color-mix(in srgb, var(--ink) 28%, var(--line)); }
+.lado:not(:disabled):active { transform: scale(.985); }
+.lado:disabled { cursor: default; }
+.lado.elegido { border-color: var(--me); background: color-mix(in srgb, var(--me) 11%, var(--surface)); }
+.lado img { width: 30px; height: 30px; object-fit: contain; }
+.eq { display: flex; flex-direction: column; min-width: 0; }
+.eq b { font-size: 17px; font-weight: 700; letter-spacing: .02em; line-height: 1.1; }
+.eq small { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.num { font-family: var(--display); font-weight: 800; font-size: 25px; line-height: 1; font-variant-numeric: tabular-nums; }
+.num.sin { font-family: var(--ui); font-size: 12px; font-weight: 500; color: var(--faint); }
+.num.pierde-marcador { color: var(--faint); }
+.quienes { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-height: 20px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 3px; height: 20px; padding: 0 7px; border-radius: 999px;
+  background: var(--c); color: var(--chip-ink); font-size: 12px; font-weight: 700; letter-spacing: .02em;
+}
+.chip.pierde { background: transparent; color: var(--c); box-shadow: inset 0 0 0 1.5px var(--c); opacity: .75; }
+.nota { font-size: 11.5px; color: var(--muted); }
+
+/* Resumen */
+.resumen { display: grid; gap: 14px; }
+.tabla-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 10px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--line); }
+tbody tr:last-child > * { border-bottom: 0; }
+thead th { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+thead th.c-rafa, thead th.c-david, thead th.c-emanuel { color: var(--c); }
+tbody th { font-weight: 600; }
+tbody th span { color: var(--faint); font-weight: 400; }
+tr.unanime td { background: color-mix(in srgb, var(--turf) 7%, transparent); }
+.pk b { font-weight: 700; }
+.pk small { font-size: 13px; color: var(--muted); margin-left: 2px; }
+.pk.gana b, .pk.gana i { color: var(--win); }
+.pk.pierde b { color: var(--loss); text-decoration: line-through; }
+.pk.empate b, .pk.empate i { color: var(--push); }
+.pk i { font-style: normal; font-weight: 700; margin-left: 4px; }
+.falta { color: var(--faint); }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 10px; cursor: pointer;
+  padding: 11px 16px; font-weight: 700; font-size: 15px; text-decoration: none;
+  background: var(--turf); color: var(--turf-on);
+}
+.btn.sec { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+.pie { font-size: 13px; color: var(--muted); max-width: 60ch; margin: 0; }
+
+/* Estados */
+.esqueleto { height: 112px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); position: relative; overflow: hidden; }
+.esqueleto::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--line) 60%, transparent), transparent);
+  animation: brillo 1.3s infinite;
+}
+@keyframes brillo { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.vacio { text-align: center; padding: 30px 12px; color: var(--muted); display: grid; gap: 12px; justify-items: center; }
+
+/* ¿Quién eres? */
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: end center; padding: 16px; background: rgb(6 12 9 / .55); }
+@media (min-width: 560px) { .modal { place-items: center; } }
+.hoja { width: 100%; max-width: 400px; background: var(--surface); border-radius: 18px; padding: 22px 18px 18px; display: grid; gap: 12px; }
+.hoja h2 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 30px; text-transform: uppercase; line-height: 1; }
+.hoja p { margin: 0; color: var(--muted); font-size: 15px; }
+.quien {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; text-align: left;
+  border: 1.5px solid var(--line); border-radius: 12px; background: var(--sunk); font-size: 19px; font-weight: 700;
+}
+.quien:hover { border-color: var(--c); }
+.quien[aria-pressed="true"] { border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, var(--surface)); }
+.quien .inicial { width: 34px; height: 34px; font-size: 16px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  z-index: 60; background: var(--ink); color: var(--ground); padding: 10px 16px; border-radius: 10px;
+  font-weight: 600; font-size: 15px; max-width: calc(100% - 32px); box-shadow: 0 6px 20px rgb(0 0 0 / .2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="barra-in">
+    <div class="fila1">
+      <div class="semana">
+        <button class="flecha" id="ant" aria-label="Semana anterior">‹</button>
+        <h1><small>QUINIELA NFL</small><span id="etiqueta">Cargando</span></h1>
+        <button class="flecha" id="sig" aria-label="Semana siguiente">›</button>
+      </div>
+      <button class="yo" id="yo" aria-label="Cambiar quién eres"><span class="inicial" id="yo-ini">?</span><span id="yo-nombre">¿Quién eres?</span></button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-vista="partidos" aria-selected="true">Partidos</button>
+      <button class="tab" role="tab" data-vista="resumen" aria-selected="false">Resumen</button>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<div class="modal" id="modal" hidden>
+  <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="modal-t">
+    <h2 id="modal-t">¿Quién eres?</h2>
+    <p>Tus picks se guardan con tu nombre. Esto se queda guardado en este teléfono.</p>
+    <div id="quienes" style="display:grid;gap:8px"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ── Configuración ───────────────────────────────────────────────
+  // Si supabaseUrl y supabaseKey están vacíos, la página corre en
+  // "modo prueba": los picks se guardan solo en este dispositivo.
+  const CONFIG = {
+    supabaseUrl: "",
+    supabaseKey: "", // publishable/anon key: es pública por diseño
+  };
+  const JUGADORES = [
+    { id: "rafa", nombre: "Rafa" },
+    { id: "david", nombre: "David" },
+    { id: "emanuel", nombre: "Emanuel" },
+  ];
+  const TZ = "America/Mexico_City";
+  const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
+  const POSTEMPORADA = {
+    "Wild Card": "Comodines",
+    "Divisional Round": "Divisional",
+    "Conference Championship": "Final de conf.",
+    "Super Bowl": "Super Bowl",
+  };
+
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const ls = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  const fDia = new Intl.DateTimeFormat("es-MX", { timeZone: TZ, weekday: "long", day: "numeric", month: "short" });
+  const fHora = new Intl.DateTimeFormat("es-MX", { timeZone: TZ, hour: "numeric", minute: "2-digit" });
+
+  const guardadoYo = ls.get("quiniela:yo");
+  const st = {
+    yo: JUGADORES.some((j) => j.id === guardadoYo) ? guardadoYo : null,
+    vista: "partidos",
+    year: null,
+    semanas: [],
+    idx: -1,
+    juegos: [],
+    proveedor: "",
+    picks: new Map(), // "gameId|persona" -> pick
+    cargando: true,
+    error: "",
+  };
+  let turno = 0;      // descarta respuestas de una semana que ya no se está viendo
+  let escrituras = 0; // descarta lecturas que empezaron antes de un pick propio
+  let pendientes = 0;
+  let firmaJuegos = "";
+  let firmaPicks = "";
+
+  // ── Dónde viven los picks ───────────────────────────────────────
+  const store = (() => {
+    if (CONFIG.supabaseUrl && CONFIG.supabaseKey) {
+      const base = CONFIG.supabaseUrl.replace(/\/+$/, "") + "/rest/v1/picks";
+      const h = { apikey: CONFIG.supabaseKey, "Content-Type": "application/json" };
+      if (!CONFIG.supabaseKey.startsWith("sb_")) h.Authorization = "Bearer " + CONFIG.supabaseKey;
+      const ok = async (r) => { if (!r.ok) throw new Error("Supabase " + r.status); return r; };
+      return {
+        compartido: true,
+        async cargar(semana) {
+          const r = await ok(await fetch(`${base}?select=*&semana=eq.${encodeURIComponent(semana)}`, { headers: h, cache: "no-store" }));
+          return r.json();
+        },
+        async guardar(p) {
+          await ok(await fetch(`${base}?on_conflict=game_id,persona`, {
+            method: "POST",
+            headers: { ...h, Prefer: "resolution=merge-duplicates,return=minimal" },
+            body: JSON.stringify(p),
+          }));
+        },
+        async borrar(p) {
+          await ok(await fetch(`${base}?game_id=eq.${encodeURIComponent(p.game_id)}&persona=eq.${encodeURIComponent(p.persona)}`, { method: "DELETE", headers: h }));
+        },
+      };
+    }
+    const key = (s) => "quiniela:picks:" + s;
+    const leer = (s) => { try { return JSON.parse(ls.get(key(s)) || "[]"); } catch { return []; } };
+    const sin = (p) => leer(p.semana).filter((x) => !(x.game_id === p.game_id && x.persona === p.persona));
+    return {
+      compartido: false,
+      async cargar(s) { return leer(s); },
+      async guardar(p) { ls.set(key(p.semana), JSON.stringify([...sin(p), p])); },
+      async borrar(p) { ls.set(key(p.semana), JSON.stringify(sin(p))); },
+    };
+  })();
+
+  // ── ESPN ────────────────────────────────────────────────────────
+  async function espn(params) {
+    const url = ESPN + (params ? "?" + new URLSearchParams(params) : "");
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error("ESPN " + r.status);
+    return r.json();
+  }
+
+  function leerCalendario(d) {
+    const out = [];
+    for (const s of d.leagues?.[0]?.calendar || []) {
+      const type = Number(s.value);
+      if (type !== 2 && type !== 3) continue;
+      for (const e of s.entries || []) {
+        if (/pro bowl/i.test(e.label)) continue;
+        out.push({ type, week: Number(e.value), label: type === 2 ? `Semana ${e.value}` : (POSTEMPORADA[e.label] || e.label) });
+      }
+    }
+    return out;
+  }
+
+  // La línea de ESPN viene como "BUF -3.5": favorito y puntos.
+  function leerLinea(o, home, away) {
+    if (!o) return null;
+    const det = String(o.details || "").trim();
+    if (/^(even|pk|pick)/i.test(det)) return { home: 0, away: 0 };
+    const m = det.match(/^([A-Z]{2,4})\s+([+-]?\d+(?:\.\d+)?)$/);
+    let fav = m ? m[1] : null;
+    let n = m ? Math.abs(parseFloat(m[2])) : null;
+    if (fav !== home && fav !== away) {
+      if (typeof o.spread !== "number") return null;
+      n = Math.abs(o.spread);
+      fav = o.homeTeamOdds?.favorite ? home : o.awayTeamOdds?.favorite ? away : (o.spread < 0 ? home : away);
+    }
+    if (!Number.isFinite(n)) return null;
+    return fav === home ? { home: -n, away: n } : { home: n, away: -n };
+  }
+
+  function leerJuegos(d) {
+    let proveedor = "";
+    const juegos = (d.events || []).map((e) => {
+      const c = e.competitions[0];
+      const H = c.competitors.find((t) => t.homeAway === "home");
+      const A = c.competitors.find((t) => t.homeAway === "away");
+      const eq = (t) => ({
+        abbr: t.team.abbreviation,
+        nombre: t.team.shortDisplayName || t.team.name,
+        logo: t.team.logo,
+        record: t.records?.[0]?.summary || "",
+        score: t.score != null && t.score !== "" ? Number(t.score) : null,
+      });
+      const o = (c.odds || [])[0];
+      if (o?.provider?.name) proveedor = o.provider.name;
+      return {
+        id: String(e.id),
+        fecha: new Date(e.date),
+        home: eq(H),
+        away: eq(A),
+        linea: leerLinea(o, H.team.abbreviation, A.team.abbreviation),
+        estado: c.status.type.state, // pre | in | post
+        detalle: c.status.type.shortDetail,
+        tv: (c.broadcasts || []).flatMap((b) => b.names || []).join(" / "),
+      };
+    }).sort((a, b) => a.fecha - b.fecha || a.id.localeCompare(b.id));
+    return { juegos, proveedor };
+  }
+
+  // Domingo en la noche con solo el de lunes pendiente: ya toca la siguiente semana.
+  function casiTerminada(juegos) {
+    const pre = juegos.filter((j) => j.estado === "pre").length;
+    return juegos.length > 0 && pre <= 2 && pre / juegos.length < 0.2;
+  }
+
+  const semanaKey = () => { const s = st.semanas[st.idx]; return `${st.year}-${s.type}-${s.week}`; };
+  const pickDe = (gid, pid) => st.picks.get(gid + "|" + pid);
+  const cerrado = (j) => j.estado !== "pre" || Date.now() >= j.fecha.getTime();
+
+  async function traerJuegos() {
+    const s = st.semanas[st.idx];
+    return leerJuegos(await espn({ dates: st.year, seasontype: s.type, week: s.week }));
+  }
+  async function traerPicks() {
+    const rows = await store.cargar(semanaKey());
+    return new Map(rows.map((p) => [p.game_id + "|" + p.persona, p]));
+  }
+
+  async function iniciar() {
+    const t = ++turno;
+    st.cargando = true; st.error = ""; pintar();
+    try {
+      const d = await espn();
+      st.year = d.season?.year;
+      st.semanas = leerCalendario(d);
+      let idx = st.semanas.findIndex((s) => s.type === d.season?.type && s.week === d.week?.number);
+      let r = idx >= 0 ? leerJuegos(d) : null;
+      if (idx < 0) idx = 0;
+      if (r && casiTerminada(r.juegos) && idx < st.semanas.length - 1) { idx++; r = null; }
+      st.idx = idx;
+      if (!r) r = await traerJuegos();
+      const picks = await traerPicks();
+      if (t !== turno) return;
+      st.juegos = r.juegos; st.proveedor = r.proveedor || st.proveedor; st.picks = picks;
+    } catch (e) {
+      if (t !== turno) return;
+      st.error = "No pude traer los partidos de ESPN. Revisa tu internet y vuelve a intentar.";
+    }
+    st.cargando = false; pintar();
+  }
+
+  async function cambiarSemana(delta) {
+    const n = st.idx + delta;
+    if (st.cargando || n < 0 || n >= st.semanas.length) return;
+    const t = ++turno;
+    st.idx = n; st.juegos = []; st.picks = new Map(); st.cargando = true; st.error = ""; pintar();
+    try {
+      const r = await traerJuegos();
+      const picks = await traerPicks();
+      if (t !== turno) return;
+      st.juegos = r.juegos; st.proveedor = r.proveedor || st.proveedor; st.picks = picks;
+    } catch (e) {
+      if (t !== turno) return;
+      st.error = "No pude traer esa semana. Revisa tu internet y vuelve a intentar.";
+    }
+    st.cargando = false; pintar();
+  }
+
+  async function refrescarPicks() {
+    if (st.cargando || st.idx < 0 || pendientes) return;
+    const t = turno, w = escrituras;
+    try {
+      const picks = await traerPicks();
+      if (t !== turno || w !== escrituras || pendientes) return;
+      st.picks = picks; pintar();
+    } catch {}
+  }
+  async function refrescarJuegos() {
+    if (st.cargando || st.idx < 0) return;
+    const t = turno;
+    try {
+      const r = await traerJuegos();
+      if (t !== turno) return;
+      st.juegos = r.juegos; st.proveedor = r.proveedor || st.proveedor; pintar();
+    } catch {}
+  }
+
+  // ── Elegir ──────────────────────────────────────────────────────
+  async function elegir(gid, equipo) {
+    if (!st.yo) { abrirQuien(); return; }
+    const j = st.juegos.find((x) => x.id === gid);
+    if (!j) return;
+    if (cerrado(j)) { aviso("Ese partido ya empezó, ya no se puede cambiar."); return; }
+    const k = gid + "|" + st.yo;
+    const antes = st.picks.get(k);
+    let op;
+    if (antes && antes.equipo === equipo) {
+      st.picks.delete(k);
+      op = () => store.borrar(antes);
+    } else {
+      const lado = j.home.abbr === equipo ? "home" : "away";
+      const p = {
+        semana: semanaKey(), game_id: gid, persona: st.yo, equipo,
+        linea: j.linea ? j.linea[lado] : null, actualizado: new Date().toISOString(),
+      };
+      st.picks.set(k, p);
+      op = () => store.guardar(p);
+    }
+    escrituras++; pendientes++; pintar();
+    try {
+      await op();
+    } catch {
+      if (antes) st.picks.set(k, antes); else st.picks.delete(k);
+      pintar();
+      aviso("No se guardó tu pick. Revisa tu internet e inténtalo otra vez.");
+    } finally {
+      pendientes--;
+    }
+  }
+
+  // ── Formato ─────────────────────────────────────────────────────
+  const fmtLinea = (n) => (n == null ? "" : n === 0 ? "PK" : n > 0 ? "+" + n : "−" + Math.abs(n));
+  const txtLinea = (n) => (n == null ? "(sin línea)" : n === 0 ? "PK" : n > 0 ? "+" + n : "-" + Math.abs(n));
+
+  function resultado(p, j) {
+    if (!p || j.estado !== "post" || p.linea == null) return "";
+    const mio = j.home.abbr === p.equipo ? j.home : j.away;
+    const otro = mio === j.home ? j.away : j.home;
+    if (mio.score == null || otro.score == null) return "";
+    const m = mio.score - otro.score + Number(p.linea);
+    return m > 0 ? "gana" : m < 0 ? "pierde" : "empate";
+  }
+  const MARCA = { gana: "✓", pierde: "✗", empate: "=" };
+
+  function recordDe(pid) {
+    const r = { gana: 0, pierde: 0, empate: 0, n: 0 };
+    for (const j of st.juegos) {
+      const p = pickDe(j.id, pid);
+      if (!p) continue;
+      r.n++;
+      const x = resultado(p, j);
+      if (x) r[x]++;
+    }
+    return r;
+  }
+
+  function textoPicks() {
+    const s = st.semanas[st.idx];
+    const lineas = [`Quiniela NFL · ${s ? s.label : ""}`];
+    for (const p of JUGADORES) {
+      const suyos = st.juegos.map((j) => [j, pickDe(j.id, p.id)]).filter(([, pk]) => pk);
+      lineas.push("", `${p.nombre.toUpperCase()} (${suyos.length}/${st.juegos.length})`);
+      if (!suyos.length) lineas.push("Sin picks todavía");
+      for (const [j, pk] of suyos) lineas.push(`${j.away.abbr} @ ${j.home.abbr}: ${pk.equipo} ${txtLinea(pk.linea)}`);
+    }
+    return lineas.join("\n");
+  }
+
+  // ── Pintar ──────────────────────────────────────────────────────
+  function pintar() {
+    const s = st.semanas[st.idx];
+    $("#etiqueta").textContent = s ? s.label : (st.cargando ? "Cargando" : "Quiniela");
+    $("#ant").disabled = st.cargando || st.idx <= 0;
+    $("#sig").disabled = st.cargando || st.idx < 0 || st.idx >= st.semanas.length - 1;
+    const yo = JUGADORES.find((j) => j.id === st.yo);
+    document.body.dataset.yo = st.yo || "";
+    $("#yo-ini").textContent = yo ? yo.nombre[0] : "?";
+    $("#yo-nombre").textContent = yo ? yo.nombre : "¿Quién eres?";
+    document.querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.vista === st.vista)));
+    if (s) document.title = `Quiniela NFL · ${s.label}`;
+
+    const main = $("#main");
+    if (st.error) {
+      main.innerHTML = `<div class="vacio"><p>${esc(st.error)}</p><button class="btn" data-accion="reintentar">Reintentar</button></div>`;
+      firmaJuegos = firmaPicks = "";
+      return;
+    }
+    if (st.cargando) {
+      main.innerHTML = `<div class="juegos">${'<div class="esqueleto"></div>'.repeat(4)}</div>`;
+      firmaJuegos = firmaPicks = "";
+      return;
+    }
+    const html = marcador() + avisoModo() + (st.vista === "partidos" ? partidos() : resumen());
+    if (main.innerHTML !== html) main.innerHTML = html;
+  }
+
+  function marcador() {
+    const total = st.juegos.length;
+    return `<div class="marcador">${JUGADORES.map((p) => {
+      const r = recordDe(p.id);
+      const res = r.gana + r.pierde + r.empate;
+      const txt = res ? `${r.gana}-${r.pierde}${r.empate ? "-" + r.empate : ""} · ${r.n}/${total}` : `${r.n}/${total} picks`;
+      return `<div class="jug c-${p.id}${r.n === total && total ? " listo" : ""}${p.id === st.yo ? " yo-mismo" : ""}"><b>${esc(p.nombre)}</b><span>${txt}</span></div>`;
+    }).join("")}</div>`;
+  }
+
+  function avisoModo() {
+    if (store.compartido) return "";
+    return `<p class="aviso"><b>Modo prueba:</b> por ahora los picks se guardan solo en este dispositivo. Todavía no se comparten con los demás.</p>`;
+  }
+
+  function partidos() {
+    if (!st.juegos.length) return `<div class="vacio"><p>No hay partidos esta semana.</p></div>`;
+    const dias = [];
+    for (const j of st.juegos) {
+      const key = fDia.format(j.fecha);
+      let d = dias[dias.length - 1];
+      if (!d || d.key !== key) dias.push((d = { key, fecha: j.fecha, juegos: [] }));
+      d.juegos.push(j);
+    }
+    return dias.map((d) => {
+      const partes = fDia.formatToParts(d.fecha);
+      const dia = partes.find((x) => x.type === "weekday")?.value || "";
+      const resto = partes.filter((x) => x.type === "day" || x.type === "month").map((x) => x.value).join(" ");
+      return `<section class="dia"><h2>${esc(dia)} <span>${esc(resto)}</span></h2><div class="juegos">${d.juegos.map(tarjeta).join("")}</div></section>`;
+    }).join("") + pieLineas();
+  }
+
+  function estadoTexto(j) {
+    if (j.estado === "in") return `<span class="edo vivo">${esc(j.detalle)}</span>`;
+    if (j.estado === "post") return `<span class="edo">Final</span>`;
+    if (cerrado(j)) return `<span class="edo cerrado">Cerrado</span>`;
+    return "";
+  }
+
+  function tarjeta(j) {
+    const tv = j.tv ? `<span>${esc(j.tv)}</span>` : "";
+    return `<article class="juego"><div class="meta"><span>${esc(fHora.format(j.fecha))}</span>${tv}${estadoTexto(j)}</div>
+      <div class="lados">${lado(j, "away")}<span class="vs">@</span>${lado(j, "home")}</div></article>`;
+  }
+
+  function lado(j, cual) {
+    const t = j[cual];
+    const otro = cual === "home" ? j.away : j.home;
+    const bloq = cerrado(j);
+    const mio = st.yo ? pickDe(j.id, st.yo) : null;
+    const elegido = !!mio && mio.equipo === t.abbr;
+    let num;
+    if (j.estado === "pre" || t.score == null) {
+      const l = j.linea ? j.linea[cual] : null;
+      num = l == null ? `<span class="num sin">sin línea</span>` : `<span class="num">${fmtLinea(l)}</span>`;
+    } else {
+      const pierde = j.estado === "post" && t.score < otro.score;
+      num = `<span class="num${pierde ? " pierde-marcador" : ""}">${t.score}</span>`;
+    }
+    const chips = JUGADORES.map((p) => {
+      const pk = pickDe(j.id, p.id);
+      if (!pk || pk.equipo !== t.abbr) return "";
+      const r = resultado(pk, j);
+      const linea = j.estado === "pre" ? "" : ` ${fmtLinea(pk.linea)}`;
+      return `<span class="chip c-${p.id}${r ? " " + r : ""}" title="${esc(p.nombre)}: ${esc(pk.equipo)} ${fmtLinea(pk.linea)}">${esc(p.nombre)}${linea}${r ? " " + MARCA[r] : ""}</span>`;
+    }).join("");
+    let nota = "";
+    if (elegido && j.estado === "pre" && j.linea && mio.linea != null && mio.linea !== j.linea[cual]) {
+      nota = `<span class="nota">la tomaste ${fmtLinea(mio.linea)}</span>`;
+    }
+    const label = `${t.nombre} ${j.linea && j.estado === "pre" ? fmtLinea(j.linea[cual]) : ""}${elegido ? ", tu pick" : ""}`;
+    return `<button class="lado${elegido ? " elegido" : ""}" data-juego="${esc(j.id)}" data-equipo="${esc(t.abbr)}" aria-pressed="${elegido}" aria-label="${esc(label)}"${bloq ? " disabled" : ""}>
+      <img src="${esc(t.logo)}" alt="" width="30" height="30" loading="lazy">
+      <span class="eq"><b>${esc(t.abbr)}</b><small>${esc(t.nombre)}</small></span>
+      ${num}
+      <span class="quienes">${chips}${nota}</span>
+    </button>`;
+  }
+
+  function pieLineas() {
+    return `<p class="pie">Líneas de ESPN${st.proveedor ? " (" + esc(st.proveedor) + ")" : ""}, se actualizan solas. Tu pick guarda la línea del momento en que eliges. Cada partido se cierra a la hora de la patada inicial. Horarios de CDMX.</p>`;
+  }
+
+  function resumen() {
+    if (!st.juegos.length) return `<div class="vacio"><p>No hay partidos esta semana.</p></div>`;
+    const filas = st.juegos.map((j) => {
+      const pks = JUGADORES.map((p) => pickDe(j.id, p.id));
+      const unanime = pks.every((p) => p && p.equipo === pks[0].equipo);
+      const celdas = pks.map((pk) => {
+        if (!pk) return `<td class="falta">·</td>`;
+        const r = resultado(pk, j);
+        return `<td class="pk${r ? " " + r : ""}"><b>${esc(pk.equipo)}</b><small>${fmtLinea(pk.linea)}</small>${r ? `<i>${MARCA[r]}</i>` : ""}</td>`;
+      }).join("");
+      return `<tr${unanime ? ' class="unanime"' : ""}><th scope="row">${esc(j.away.abbr)} <span>@</span> ${esc(j.home.abbr)}</th>${celdas}</tr>`;
+    }).join("");
+    const wa = "https://wa.me/?text=" + encodeURIComponent(textoPicks());
+    return `<section class="resumen">
+      <div class="tabla-wrap"><table>
+        <thead><tr><th>Partido</th>${JUGADORES.map((p) => `<th class="c-${p.id}">${esc(p.nombre)}</th>`).join("")}</tr></thead>
+        <tbody>${filas}</tbody>
+      </table></div>
+      <div class="acciones">
+        <button class="btn" data-accion="copiar">Copiar picks</button>
+        <a class="btn sec" href="${esc(wa)}" target="_blank" rel="noopener">Mandar por WhatsApp</a>
+      </div>
+      <p class="pie">El renglón verde es donde los tres coinciden. "Copiar picks" arma el texto con los picks de cada quien, listo para subirlos a la quiniela.</p>
+    </section>`;
+  }
+
+  // ── ¿Quién eres? ────────────────────────────────────────────────
+  function abrirQuien() {
+    $("#quienes").innerHTML = JUGADORES.map((p) =>
+      `<button class="quien c-${p.id}" data-quien="${p.id}" aria-pressed="${p.id === st.yo}"><span class="inicial">${esc(p.nombre[0])}</span>${esc(p.nombre)}</button>`
+    ).join("");
+    $("#modal").hidden = false;
+  }
+  function cerrarQuien() { if (st.yo) $("#modal").hidden = true; }
+
+  let toastT;
+  function aviso(msg) {
+    const t = $("#toast");
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastT);
+    toastT = setTimeout(() => { t.hidden = true; }, 2600);
+  }
+
+  async function copiar() {
+    const txt = textoPicks();
+    try {
+      await navigator.clipboard.writeText(txt);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch {}
+      ta.remove();
+    }
+    aviso("Picks copiados");
+  }
+
+  // ── Eventos ─────────────────────────────────────────────────────
+  document.addEventListener("click", (e) => {
+    const lado = e.target.closest(".lado");
+    if (lado && !lado.disabled) { elegir(lado.dataset.juego, lado.dataset.equipo); return; }
+    const quien = e.target.closest("[data-quien]");
+    if (quien) {
+      st.yo = quien.dataset.quien; ls.set("quiniela:yo", st.yo);
+      $("#modal").hidden = true; pintar(); return;
+    }
+    const tab = e.target.closest(".tab");
+    if (tab) { st.vista = tab.dataset.vista; pintar(); return; }
+    const acc = e.target.closest("[data-accion]")?.dataset.accion;
+    if (acc === "copiar") copiar();
+    if (acc === "reintentar") (st.semanas.length ? cambiarSemana(0) : iniciar());
+    if (e.target === $("#modal")) cerrarQuien();
+  });
+  $("#yo").addEventListener("click", abrirQuien);
+  $("#ant").addEventListener("click", () => cambiarSemana(-1));
+  $("#sig").addEventListener("click", () => cambiarSemana(1));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarQuien(); });
+
+  setInterval(() => { if (!document.hidden) refrescarPicks(); }, store.compartido ? 8000 : 20000);
+  setInterval(() => { if (!document.hidden) refrescarJuegos(); }, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { refrescarPicks(); refrescarJuegos(); } });
+  window.addEventListener("storage", (e) => { if (e.key && e.key.startsWith("quiniela:picks:")) refrescarPicks(); });
+
+  pintar();
+  iniciar();
+  if (!st.yo) abrirQuien();
+})();
+</script>
+</body>
+</html>
