@@ -155,9 +155,9 @@ main { max-width: 680px; margin: 0 auto; padding: 14px 16px 64px; display: grid;
 .lados { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 4px; }
 .vs { align-self: center; color: var(--faint); font-size: 13px; }
 .lado {
-  display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center;
-  column-gap: 8px; row-gap: 6px; min-width: 0; text-align: left; cursor: pointer;
-  padding: 9px 10px; border-radius: 9px; border: 1.5px solid var(--line); background: var(--sunk);
+  display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center;
+  column-gap: 6px; row-gap: 6px; min-width: 0; text-align: left; cursor: pointer;
+  padding: 9px 9px; border-radius: 9px; border: 1.5px solid var(--line); background: var(--sunk);
   transition: border-color .15s, background-color .15s;
   -webkit-tap-highlight-color: transparent;
 }
@@ -165,7 +165,7 @@ main { max-width: 680px; margin: 0 auto; padding: 14px 16px 64px; display: grid;
 .lado:not(:disabled):active { transform: scale(.985); }
 .lado:disabled { cursor: default; }
 .lado.elegido { border-color: var(--me); background: color-mix(in srgb, var(--me) 11%, var(--surface)); }
-.lado img { width: 30px; height: 30px; object-fit: contain; }
+.lado img { width: 26px; height: 26px; object-fit: contain; }
 .eq { display: flex; flex-direction: column; min-width: 0; }
 .eq b { font-size: 17px; font-weight: 700; letter-spacing: .02em; line-height: 1.1; }
 .eq small { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
