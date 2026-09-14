@@ -331,6 +331,7 @@ tr.unanime td { background: color-mix(in srgb, var(--turf) 7%, transparent); }
   let turno = 0;      // descarta respuestas de una semana que ya no se está viendo
   let escrituras = 0; // descarta lecturas que empezaron antes de un pick propio
   let pendientes = 0;
+  let ultimaLectura = null; // hora de la última respuesta de ESPN
   let firmaJuegos = "";
   let firmaPicks = "";
 
@@ -375,7 +376,9 @@ tr.unanime td { background: color-mix(in srgb, var(--turf) 7%, transparent); }
     const url = ESPN + (params ? "?" + new URLSearchParams(params) : "");
     const r = await fetch(url, { cache: "no-store" });
     if (!r.ok) throw new Error("ESPN " + r.status);
-    return r.json();
+    const d = await r.json();
+    ultimaLectura = new Date();
+    return d;
   }
 
   function leerCalendario(d) {
@@ -694,7 +697,8 @@ tr.unanime td { background: color-mix(in srgb, var(--turf) 7%, transparent); }
   }
 
   function pieLineas() {
-    return `<p class="pie">Líneas de ESPN${st.proveedor ? " (" + esc(st.proveedor) + ")" : ""}, se actualizan solas. Tu pick guarda la línea del momento en que eliges. Cada partido se cierra a la hora de la patada inicial. Horarios de CDMX.</p>`;
+    const hora = ultimaLectura ? `, actualizadas a las ${esc(fHora.format(ultimaLectura))}` : "";
+    return `<p class="pie">Líneas de ESPN${st.proveedor ? " (" + esc(st.proveedor) + ")" : ""}${hora}. Se refrescan solas cada minuto. Tu pick guarda la línea del momento en que eliges. Cada partido se cierra a la hora de la patada inicial. Horarios de CDMX.</p>`;
   }
 
   // El lado que eligió la mayoría. Si hay picks con líneas distintas, usa la más repetida.
