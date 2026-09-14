@@ -698,7 +698,7 @@ tr.unanime td { background: color-mix(in srgb, var(--turf) 7%, transparent); }
 
   function pieLineas() {
     const hora = ultimaLectura ? `, actualizadas a las ${esc(fHora.format(ultimaLectura))}` : "";
-    return `<p class="pie">Líneas de ESPN${st.proveedor ? " (" + esc(st.proveedor) + ")" : ""}${hora}. Se refrescan solas cada minuto. Tu pick guarda la línea del momento en que eliges. Cada partido se cierra a la hora de la patada inicial. Horarios de CDMX.</p>`;
+    return `<p class="pie">Líneas de ESPN${st.proveedor ? " (" + esc(st.proveedor) + ")" : ""}${hora ? hora + " " : ". "}Se refrescan solas cada minuto. Tu pick guarda la línea del momento en que eliges. Cada partido se cierra a la hora de la patada inicial. Horarios de CDMX.</p>`;
   }
 
   // El lado que eligió la mayoría. Si hay picks con líneas distintas, usa la más repetida.
